@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glass Weather Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="weather-dashboard.css">
+</head>
+<body>
+    <div class="background" id="background"></div>
+    <div class="overlay"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-cloud-sun"></i> Glass Weather Dashboard</h1>
+            <p>Real-time weather with beautiful glass effect</p>
+        </div>
+
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="Enter city name" value="Seattle">
+                <button class="search-btn" id="searchBtn">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+        </div>
+
+        <div class="cities-section">
+            <h3 class="section-title">Weather in Major Cities</h3>
+            <div class="cities-grid" id="citiesGrid">
+                <div class="city-card">
+                    <div class="city-name">Rajkot</div>
+                    <i class="fas fa-cloud city-icon"></i>
+                    <div class="city-temp">--°C</div>
+                    <div class="city-desc">Loading...</div>
+                </div>
+                <div class="city-card">
+                    <div class="city-name">New York</div>
+                    <i class="fas fa-cloud city-icon"></i>
+                    <div class="city-temp">--°C</div>
+                    <div class="city-desc">Loading...</div>
+                </div>
+                <div class="city-card">
+                    <div class="city-name">Tokyo</div>
+                    <i class="fas fa-cloud city-icon"></i>
+                    <div class="city-temp">--°C</div>
+                    <div class="city-desc">Loading...</div>
+                </div>
+                <div class="city-card">
+                    <div class="city-name">London</div>
+                    <i class="fas fa-cloud city-icon"></i>
+                    <div class="city-temp">--°C</div>
+                    <div class="city-desc">Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="loader" id="loader">
+                <i class="fas fa-cloud-sun weather-icon"></i>
+                <p>Loading weather data...</p>
+            </div>
+
+            <div class="error-message" id="errorMessage">
+                <i class="fas fa-exclamation-circle"></i>
+                <p>Unable to fetch weather data. Please try again.</p>
+            </div>
+
+            <div class="current-weather" id="currentWeather">
+                <h2 class="location" id="location">Seattle, US</h2>
+                <p class="date" id="date">Loading date...</p>
+                <i class="fas fa-cloud weather-icon" id="weatherIcon"></i>
+                <h1 class="temperature" id="temperature">--°C</h1>
+                <p class="description" id="description">Loading weather data</p>
+
+                <div class="weather-details">
+                    <div class="detail-card">
+                        <div class="detail-icon">
+                            <i class="fas fa-wind"></i>
+                        </div>
+                        <div class="detail-value" id="windSpeed">-- km/h</div>
+                        <div class="detail-label">Wind Speed</div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-icon">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <div class="detail-value" id="humidity">--%</div>
+                        <div class="detail-label">Humidity</div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-icon">
+                            <i class="fas fa-temperature-high"></i>
+                        </div>
+                        <div class="detail-value" id="maxTemp">--°C</div>
+                        <div class="detail-label">Max Temp</div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-icon">
+                            <i class="fas fa-temperature-low"></i>
+                        </div>
+                        <div class="detail-value" id="minTemp">--°C</div>
+                        <div class="detail-label">Min Temp</div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-icon">
+                            <i class="fas fa-sun"></i>
+                        </div>
+                        <div class="detail-value" id="sunrise">--:--</div>
+                        <div class="detail-label">Sunrise</div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-icon">
+                            <i class="fas fa-moon"></i>
+                        </div>
+                        <div class="detail-value" id="sunset">--:--</div>
+                        <div class="detail-label">Sunset</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="forecast">
+                <h3 class="section-title">Weather Forecast</h3>
+                <div class="forecast-cards" id="forecastCards">
+                    <div class="forecast-card">
+                        <div class="forecast-date">Today</div>
+                        <i class="fas fa-cloud forecast-icon"></i>
+                        <div class="forecast-temp">--°C</div>
+                        <div class="forecast-desc">Loading data</div>
+                    </div>
+                    <div class="forecast-card">
+                        <div class="forecast-date">Tomorrow</div>
+                        <i class="fas fa-cloud forecast-icon"></i>
+                        <div class="forecast-temp">--°C</div>
+                        <div class="forecast-desc">Loading data</div>
+                    </div>
+                    <div class="forecast-card">
+                        <div class="forecast-date">Day after</div>
+                        <i class="fas fa-cloud forecast-icon"></i>
+                        <div class="forecast-temp">--°C</div>
+                        <div class="forecast-desc">Loading data</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Weather data for demonstration purposes | Created with <i class="fas fa-heart"></i></p>
+        </div>
+    </div>
+
+    <script src="weather-dashboard.js"></script>
+</body>
+</html>

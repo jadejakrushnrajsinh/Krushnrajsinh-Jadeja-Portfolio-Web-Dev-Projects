@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Loading Dashboard...</p>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content login-form">
+            <div class="login-header">
+                <h2><i class="fas fa-shield-alt"></i> Admin Login</h2>
+                <p>Access your portfolio dashboard</p>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </form>
+            <div id="loginError" class="error-message"></div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div id="dashboard" class="dashboard" style="display: none;">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3><i class="fas fa-user-cog"></i> Admin Panel</h3>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#overview" class="nav-link active" data-section="overview">
+                            <i class="fas fa-chart-line"></i> Overview
+                        </a></li>
+                    <li><a href="#projects" class="nav-link" data-section="projects">
+                            <i class="fas fa-folder-open"></i> Projects
+                        </a></li>
+                    <li><a href="#messages" class="nav-link" data-section="messages">
+                            <i class="fas fa-envelope"></i> Messages
+                            <span id="messageCount" class="badge">0</span>
+                        </a></li>
+                    <li><a href="#tasks" class="nav-link" data-section="tasks">
+                            <i class="fas fa-tasks"></i> Tasks
+                        </a></li>
+                    <li><a href="#analytics" class="nav-link" data-section="analytics">
+                            <i class="fas fa-chart-bar"></i> Analytics
+                        </a></li>
+                    <li><a href="#settings" class="nav-link" data-section="settings">
+                            <i class="fas fa-cog"></i> Settings
+                        </a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logoutBtn" class="btn btn-secondary">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="dashboard-header">
+                <div class="header-left">
+                    <h1 id="sectionTitle">Dashboard Overview</h1>
+                </div>
+                <div class="header-right">
+                    <div class="user-info">
+                        <span id="userName">Admin</span>
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Overview Section -->
+            <section id="overviewSection" class="content-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-folder-open"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalProjects">0</h3>
+                            <p>Total Projects</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalMessages">0</h3>
+                            <p>Messages</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalViews">0</h3>
+                            <p>Total Views</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalTasks">0</h3>
+                            <p>Active Tasks</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3><i class="fas fa-chart-line"></i> Recent Activity</h3>
+                        <div id="recentActivity" class="activity-list">
+                            <!-- Activity items will be loaded here -->
+                        </div>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3><i class="fas fa-star"></i> Featured Projects</h3>
+                        <div id="featuredProjects" class="featured-list">
+                            <!-- Featured projects will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Projects Section -->
+            <section id="projectsSection" class="content-section">
+                <div class="section-header">
+                    <h2>Project Management</h2>
+                    <button id="addProjectBtn" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Project
+                    </button>
+                </div>
+                <div class="projects-grid" id="projectsGrid">
+                    <!-- Projects will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Messages Section -->
+            <section id="messagesSection" class="content-section">
+                <div class="section-header">
+                    <h2>Contact Messages</h2>
+                    <div class="message-filters">
+                        <select id="messageFilter">
+                            <option value="all">All Messages</option>
+                            <option value="unread">Unread</option>
+                            <option value="read">Read</option>
+                            <option value="archived">Archived</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="messages-list" id="messagesList">
+                    <!-- Messages will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Tasks Section -->
+            <section id="tasksSection" class="content-section">
+                <div class="section-header">
+                    <h2>Task Management</h2>
+                    <button id="addTaskBtn" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Task
+                    </button>
+                </div>
+                <div class="tasks-container">
+                    <div class="task-filters">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="pending">Pending</button>
+                        <button class="filter-btn" data-filter="in-progress">In Progress</button>
+                        <button class="filter-btn" data-filter="completed">Completed</button>
+                    </div>
+                    <div class="tasks-list" id="tasksList">
+                        <!-- Tasks will be loaded here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Analytics Section -->
+            <section id="analyticsSection" class="content-section">
+                <div class="section-header">
+                    <h2>Analytics Dashboard</h2>
+                    <div class="date-range">
+                        <select id="analyticsRange">
+                            <option value="7">Last 7 days</option>
+                            <option value="30">Last 30 days</option>
+                            <option value="90">Last 90 days</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <h3>Page Views</h3>
+                        <canvas id="pageViewsChart"></canvas>
+                    </div>
+                    <div class="analytics-card">
+                        <h3>Popular Projects</h3>
+                        <div id="popularProjects"></div>
+                    </div>
+                    <div class="analytics-card">
+                        <h3>Visitor Locations</h3>
+                        <div id="visitorLocations"></div>
+                    </div>
+                    <div class="analytics-card">
+                        <h3>Device Types</h3>
+                        <canvas id="deviceChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settingsSection" class="content-section">
+                <div class="section-header">
+                    <h2>Settings</h2>
+                </div>
+                <div class="settings-grid">
+                    <div class="settings-card">
+                        <h3><i class="fas fa-user"></i> Profile Settings</h3>
+                        <form id="profileForm">
+                            <div class="form-group">
+                                <label for="profileName">Name</label>
+                                <input type="text" id="profileName" name="name">
+                            </div>
+                            <div class="form-group">
+                                <label for="profileEmail">Email</label>
+                                <input type="email" id="profileEmail" name="email">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Update Profile</button>
+                        </form>
+                    </div>
+                    <div class="settings-card">
+                        <h3><i class="fas fa-lock"></i> Change Password</h3>
+                        <form id="passwordForm">
+                            <div class="form-group">
+                                <label for="currentPassword">Current Password</label>
+                                <input type="password" id="currentPassword" name="currentPassword">
+                            </div>
+                            <div class="form-group">
+                                <label for="newPassword">New Password</label>
+                                <input type="password" id="newPassword" name="newPassword">
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirm Password</label>
+                                <input type="password" id="confirmPassword" name="confirmPassword">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Change Password</button>
+                        </form>
+                    </div>
+                    <div class="settings-card">
+                        <h3><i class="fas fa-edit"></i> Footer Settings</h3>
+                        <form id="footerForm">
+                            <div class="form-group">
+                                <label for="footerCopyright">Copyright Text</label>
+                                <input type="text" id="footerCopyright" name="copyright"
+                                    placeholder="© 2023 Your Name. All rights reserved.">
+                            </div>
+                            <div class="form-group">
+                                <label>Social Links</label>
+                                <div id="socialLinksContainer">
+                                    <!-- Social links will be loaded here -->
+                                </div>
+                                <button type="button" id="addSocialLink" class="btn btn-secondary btn-sm">
+                                    <i class="fas fa-plus"></i> Add Social Link
+                                </button>
+                            </div>
+                            <div class="form-group">
+                                <label for="footerCustomText">Custom Text (Optional)</label>
+                                <textarea id="footerCustomText" name="customText" rows="3"
+                                    placeholder="Additional footer text..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Footer Settings</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="projectModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="projectModalTitle">Add Project</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="projectForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="projectTitle">Title *</label>
+                        <input type="text" id="projectTitle" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectCategory">Category</label>
+                        <select id="projectCategory" name="category">
+                            <option value="Web Development">Web Development</option>
+                            <option value="Mobile App">Mobile App</option>
+                            <option value="Desktop App">Desktop App</option>
+                            <option value="API">API</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="projectDescription">Description *</label>
+                    <textarea id="projectDescription" name="description" required></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="projectStatus">Status</label>
+                        <select id="projectStatus" name="status">
+                            <option value="Completed">Completed</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="On Hold">On Hold</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectPriority">Priority</label>
+                        <select id="projectPriority" name="priority">
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                            <option value="Low">Low</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="projectUrl">Project URL</label>
+                        <input type="url" id="projectUrl" name="projectUrl">
+                    </div>
+                    <div class="form-group">
+                        <label for="githubUrl">GitHub URL</label>
+                        <input type="url" id="githubUrl" name="githubUrl">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="projectTechnologies">Technologies (comma-separated)</label>
+                    <input type="text" id="projectTechnologies" name="technologies"
+                        placeholder="React, Node.js, MongoDB">
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="projectFeatured" name="featured">
+                        Featured Project
+                    </label>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary modal-close">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Project</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Task Modal -->
+    <div id="taskModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="taskModalTitle">Add Task</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="taskForm">
+                <div class="form-group">
+                    <label for="taskTitle">Title *</label>
+                    <input type="text" id="taskTitle" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="taskDescription">Description</label>
+                    <textarea id="taskDescription" name="description"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="taskPriority">Priority</label>
+                        <select id="taskPriority" name="priority">
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskDueDate">Due Date</label>
+                        <input type="date" id="taskDueDate" name="dueDate">
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary modal-close">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast" class="toast">
+        <div id="toastMessage"></div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+
+</html>
